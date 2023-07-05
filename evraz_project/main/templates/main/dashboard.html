@@ -1,0 +1,142 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Дашборд{% endblock %}
+
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <div class="features">
+        <h1>Дашборд</h1>
+    </div>
+
+<div class="wrapper">
+  <div class="content">
+    <div class="left-content">
+        <p><b>Суммарное отклонение плана и факта по профилям</b></p>
+        <canvas id="myChart" height="480" width="500"></canvas>
+    </div>
+    <div class="right-content">
+        <table width="500">
+            <tbody>
+                <tr>
+                    <thead><tr><th colspan="2">Производительность</th></tr></thead>
+                    <td>Текущая производительность, т/ч</td>
+                    <td>Необходимая производительность для выполнения плана, т/ч </td>
+                </tr>
+                <tr>
+                    <td>{{plan_now_perfomance}}</td>
+                    <td>158.59</td>
+                </tr>
+            </tbody>
+    </table>
+        <br><br>
+        <table width="500">
+            <thead><tr><th colspan="2">Производство на текущий час</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>План</td>
+                    <td>Прогноз</td>
+                </tr>
+                <tr>
+                    <td>{{ sum_plan_volumes_now }}</td>
+                    <td>{{ production_now_predict }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <table width="500">
+            <thead><tr><th colspan="2">Производство на конец смены</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>План</td>
+                    <td>Прогноз</td>
+                </tr>
+                <tr>
+                    <td>{{plan_end}}</td>
+                    <td>{{fact_end_predict}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <table width="500">
+            <thead><tr><th colspan="{{plan_fact_diff_len}}">Отклонение от плана по профилям</th></tr></thead>
+            <tbody>
+                <tr>
+                    {% for item in profiles %} <td>{{ item }}</td> {% endfor %}
+                </tr>
+                <tr>
+                    {% for item in plan_fact_diff %} <td>{{ item }}</td> {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [{% for item in profiles %} '{{ item }}', {% endfor %}],
+      datasets: [{
+        label: 'План',
+        data: [{% for item in plan_volumes_now %} {{ item }}, {% endfor %}],
+        backgroundColor: '#4A7DAC',
+        borderWidth: 1
+      },
+      {
+        label: 'Факт',
+        data: [{% for item in fact_volumes %} {{ item }}, {% endfor %}],
+        backgroundColor: '#FA7237',
+        borderWidth: 1
+      }]
+    },
+    options: {
+    responsive: false,
+
+    }
+  });
+
+  const ctx2 = document.getElementById('myChart2');
+
+  new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      datasets: [{
+        label: 'Круг 32',
+        data: [165, 195, 205, 255, 555],
+        backgroundColor: 'red',
+        borderWidth: 1
+      },
+      {
+        label: 'Круг 33',
+        data: [60, 90, 100, 150, 666],
+        backgroundColor: 'orange',
+        borderWidth: 1
+      },
+      {
+        label: 'Круг 36',
+        data: [165, 195, 205, 255, 555],
+        backgroundColor: 'yellow',
+        borderWidth: 1
+      },
+      {
+        label: 'Круг 38',
+        data: [165, 195, 205, 255, 555],
+        backgroundColor: 'green',
+        borderWidth: 1
+      }]
+    },
+    options: {
+    responsive: false,
+
+    }
+  });
+
+</script>
+
+{% endblock %}

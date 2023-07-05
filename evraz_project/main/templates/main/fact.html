@@ -1,0 +1,27 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Факт{% endblock %}
+
+
+{% block content %}
+
+    <div class="features">
+        <h1>Факт</h1>
+        <br>
+         <form id="form-container" method="POST">
+             {% csrf_token %}
+         <p class="smena">  Текущий час: {{now_hour}}</p> <br>
+        {%for form in plan_form%}
+            <div class="bird-form">
+                {{form.id}}
+                <p class="hour">{{form.hour}} час</p><br>
+                <hr>
+             {{form.action_type}} {{form.profile}} {{fact_form.time}}минут Фактический объём:{{fact_form.volume}}т
+            <hr><br>
+            </div>
+            {% endfor %}
+            </p>
+            <button type="submit">Сохранить</button>
+         </form>
+    </div>
+{% endblock %}

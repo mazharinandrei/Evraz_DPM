@@ -1,0 +1,57 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}План{% endblock %}
+
+
+{% block content %}
+    <div class="features">
+        <h1>План на смену</h1>
+        <br>
+        <form id="form-container" method="POST">
+            <p class="smena"> Смена: {{ work_shift_form.type }} {{ work_shift_form.date }} </p> <br>
+            <p>
+
+
+            {%for form in plan_form%}
+            <div class="bird-form">
+            {% csrf_token %}
+                <p class="hour">{{form.hour}} час</p><br>
+                <hr>
+                {{form.action_type}} {{form.profile}} {{form.time}}минут Планируемый объём:{{form.volume}}т
+                <hr><br>
+            </div>
+            {% endfor %}
+                <button id="add-form" type="button">+</button>
+                <br><br>
+
+            </p>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+
+  <script>
+        let birdForm = document.querySelectorAll(".bird-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = birdForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = birdForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+
+            totalForms.setAttribute('value', `${formNum+1}`)
+        }
+    </script>
+{% endblock %}
+
+
+
